@@ -2,19 +2,36 @@ import subprocess
 import sys
 import os
 
-# Install PyTorch CPU versions if not available
-try:
-    import torch
-    import torchvision
-except ImportError:
-    print("Installing PyTorch CPU versions...")
-    subprocess.check_call([
-        sys.executable, "-m", "pip", "install", 
-        "torch==2.0.1+cpu", "torchvision==0.15.2+cpu", 
-        "-f", "https://download.pytorch.org/whl/torch_stable.html"
-    ])
-    # Restart to load the new packages
-    os.execv(sys.executable, [sys.executable] + sys.argv)
+# Install PyTorch if not available
+def install_pytorch():
+    try:
+        import torch
+        import torchvision
+        print("PyTorch is already installed")
+    except ImportError:
+        print("Installing PyTorch...")
+        # Try different installation methods
+        methods = [
+            [sys.executable, "-m", "pip", "install", "torch", "torchvision", "--extra-index-url", "https://download.pytorch.org/whl/cpu"],
+            [sys.executable, "-m", "pip", "install", "torch==1.12.0", "torchvision==0.13.0"],
+            [sys.executable, "-m", "pip", "install", "torch", "torchvision"]
+        ]
+        
+        for method in methods:
+            try:
+                subprocess.check_call(method)
+                print("PyTorch installed successfully!")
+                break
+            except:
+                continue
+        else:
+            print("Failed to install PyTorch")
+
+# Install PyTorch on first run
+if not os.path.exists('pytorch_installed.flag'):
+    install_pytorch()
+    with open('pytorch_installed.flag', 'w') as f:
+        f.write('installed')
 
 import streamlit as st
 import torch
@@ -27,20 +44,7 @@ import json
 import matplotlib.pyplot as plt
 import requests
 
-# Rest of your app code...
-import streamlit as st
-import torch
-import torch.nn as nn
-from torchvision import models, transforms
-from PIL import Image
-import numpy as np
-import torch.nn.functional as F
-import json
-import matplotlib.pyplot as plt
-import requests
-import os
-
-# Set page config
+# Rest of your original app code continues here...
 st.set_page_config(
     page_title="Alzheimer's MRI Classifier",
     page_icon="🧠",
@@ -72,13 +76,6 @@ st.markdown("""
     .disclaimer {
         background-color: #fff3cd;
         border: 1px solid #ffeaa7;
-        border-radius: 5px;
-        padding: 1rem;
-        margin: 1rem 0;
-    }
-    .download-info {
-        background-color: #d1ecf1;
-        border: 1px solid #bee5eb;
         border-radius: 5px;
         padding: 1rem;
         margin: 1rem 0;

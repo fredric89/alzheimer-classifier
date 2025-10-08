@@ -1,0 +1,9 @@
+{
+    "class_names": ["MildDemented", "ModerateDemented", "NonDemented", "VeryMildDemented"],
+    "class_descriptions": {
+        "NonDemented": "No signs of Alzheimer's disease detected",
+        "VeryMildDemented": "Very mild cognitive decline",
+        "MildDemented": "Mild cognitive decline - early stage Alzheimer's",
+        "ModerateDemented": "Moderate cognitive decline - middle stage Alzheimer's"
+    }
+}

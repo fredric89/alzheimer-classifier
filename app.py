@@ -1,3 +1,33 @@
+import subprocess
+import sys
+import os
+
+# Install PyTorch CPU versions if not available
+try:
+    import torch
+    import torchvision
+except ImportError:
+    print("Installing PyTorch CPU versions...")
+    subprocess.check_call([
+        sys.executable, "-m", "pip", "install", 
+        "torch==2.0.1+cpu", "torchvision==0.15.2+cpu", 
+        "-f", "https://download.pytorch.org/whl/torch_stable.html"
+    ])
+    # Restart to load the new packages
+    os.execv(sys.executable, [sys.executable] + sys.argv)
+
+import streamlit as st
+import torch
+import torch.nn as nn
+from torchvision import models, transforms
+from PIL import Image
+import numpy as np
+import torch.nn.functional as F
+import json
+import matplotlib.pyplot as plt
+import requests
+
+# Rest of your app code...
 import streamlit as st
 import torch
 import torch.nn as nn
